@@ -1,0 +1,22 @@
+{
+  "name": "colored-calculator",
+  "version": "1.0.0",
+  "description": "A calculator with changing background color",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/United1l/Colored-calculator.git"
+  },
+  "author": "United1l",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/United1l/Colored-calculator/issues"
+  },
+  "homepage": "https://github.com/United1l/Colored-calculator#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
