@@ -69,15 +69,9 @@ function indexToggle(element) {
 // Addition function
 function add(array) {
 	var result;
-	for (var i = 0; i < array.length; i++) {
-		if (array[i].innerText == "+") {
-			const rightOperators = getRightElem(array[i], array);
-			const leftOperators = getLeftElem(array[i], array);
-			result = (parseElems(leftOperators) + parseElems(rightOperators)).toString();
-		} else {
-			console.log(array)
-		}
-	}
+	let rightOperators = getOperatorArgs(array);
+	let leftOperators = getOperatorArgs(array.reverse());
+	result = (parseElems(leftOperators) + parseElems(rightOperators)).toString();
 	console.log(result);
 	allClear(array);
 	appendTextToDisplay(result);
@@ -103,28 +97,37 @@ function power(array) {
 	
 }
 
-// Function that gets element elements on the right-side of an operator.
-function getRightElem(element, array) {
-	const [element, ...rightOperators] = array;
-	return rightOperators;
-}
-
-// Function that gets elements on the left-side of an operator.
-function getLeftElem(elem, array) {
-	const [elem, ...leftOperators] = array.reverse();
-	return leftOperators;
+// Function to get the numbers to be summed that are on the left and right of the operator
+function getOperatorArgs(array) {
+	for (var i = 0; i < array.length; i++) {
+		if (array[i].innerText == "+") {
+			let Operators = array.split('+');
+			const [, ...operators] = Operators;
+			console.log(operators);		
+		} else {
+			console.log(array)
+		}
+		return Operators;
+	}
+	return Operators;
 }
 
 
 // Function that accepts any array as a parameter and converts all the array item to the number data type.
 function parseElems(array) {
-	let parsedOperators = [];
+	let stringArr = [];
 	for (var i = 0; i < array.length; i++) {
-		let parsedElem = parseInt(array[i]);
-		parsedOperators = [...parsedOperators, parsedElem];
+		stringArr.push(array[i].innerText);
 	}
+	if (stringArr.length > 0) {
+		let combinedElem = stringArr.join("");
+		return combinedElem;
+	} else {
+		console.log("loop not working")
+	}
+	const parsedElem = parseInt(combinedElem);
 
-	return parsedOperators;
+	return parsedElem;
 }
 
 // Function that removes all innerText connected to the display element
