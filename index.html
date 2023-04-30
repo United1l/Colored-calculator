@@ -3,14 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A calculator that changes color upon number input">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colored Calculator</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container p-5 align-items-center">
-        <div class="container-fluid col-12 flex-column align-items-center text-center">
+    <div class="container m-0 p-5 flex-column align-items-center">
+        <div class="row"><div class="col-12">
+            <h1><em id="titleColored">Colored</em> calculator</h1>
+        </div></div>
+        <div class="row" id="instructionsBox">
+            <div class="col-12 col-lg-6">
+                <div>
+                <h5><em>Instructions for the calculator</em></h5>
+                <p>1. The calculator only operates on two values at once.</p>
+                <p>2. The values may be two, three etc figures except very large numbers as this exceeds the app's limit.</p>
+                <p>3. AC for all clear.</p>
+                <p>4. C for clear.</p>
+                </div>    
+            </div>
+        </div>
+        <div class="calculator">
             <div class="display align-items-center col-12 col-lg-6"><p id="index">|</p></div>
             <div class="table col-12 col-lg-6">
                 <div class="rows row justify-content-center">

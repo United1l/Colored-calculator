@@ -2,6 +2,7 @@ const container = document.querySelector('.container');
 const displayBox = document.querySelector('.display');
 const index = document.querySelector('#index');
 const equalSign = document.getElementById('equalSign');
+const titleColored = document.getElementById('titleColored');
 let inputText = document.querySelectorAll('.inputDisplay');
 let displayBoxElementsArray = displayBox.children;
 
@@ -15,12 +16,14 @@ for(var i = 0; i < inputText.length; i++) {
 			removeTextFromDisplay(operationElems[operationElems.length-1]);
 		} else {
 			appendTextToDisplay(e.target);
-			setColor(container);
+			setColor(container, 0.2);
+			titleColored.style.color = randomRGB(0.8);
 		}
 	});
 }
 
-equalSign.addEventListener('click', (displayBoxElementsArray) => {
+equalSign.addEventListener('click', (array) => {
+	console.log(displayBoxElementsArray);
 	const [index, ...operationElems] = displayBoxElementsArray;
 	for (var i = 0; i < operationElems.length; i++) {
 		switch(operationElems[i].innerText) {
@@ -40,8 +43,8 @@ equalSign.addEventListener('click', (displayBoxElementsArray) => {
 			power(operationElems);
 			break;
 		default:
-		console.log(operationElems);
-		break;				
+			console.log(operationElems);
+			break;				
 		}
 	}
 }); 
@@ -68,66 +71,114 @@ function indexToggle(element) {
 
 // Addition function
 function add(array) {
-	var result;
-	let rightOperators = getOperatorArgs(array);
-	let leftOperators = getOperatorArgs(array.reverse());
-	result = (parseElems(leftOperators) + parseElems(rightOperators)).toString();
-	console.log(result);
-	allClear(array);
-	appendTextToDisplay(result);
+	let operator = "+";
+	performOperation(operator, array);
 }
 
 // Subtraction function
-function subtract(array) {
-	
+function subtract(array) {	
+	let operator = "-";
+	performOperation(operator, array);
 }
 
 // Multiplication function
 function multiply(array) {
-	
+	let operator = "*";
+	performOperation(operator, array);
 }
 
 // Division function
 function divide(array) {
-	
+	let operator = "/";
+	performOperation(operator, array);	
 }
 
 // Power function
 function power(array) {
+	let operator = "^";
+	performOperation(operator, array);
+}
+
+// Function that performs the calculator operation depending on which operator calls it
+function performOperation(operator, array) {	
+	var result;
+	var resultNode;
+	const operatorArgs = outputOperatorArgs(array);
+	if (operator == "+") {
+		result = operatorArgs[0] + operatorArgs[1];
+	} else if (operator == "-") {
+		result = operatorArgs[0] - operatorArgs[1];
+	} else if (operator == "*") {
+		result = operatorArgs[0] * operatorArgs[1];
+	} else if (operator == "/") {
+		result = operatorArgs[0] / operatorArgs[1];
+	} else if (operator == "^") {
+		result = operatorArgs[0] ** operatorArgs[1];
+	} else {
+		console.log(operatorArgs)
+	}
+	resultNode = createAddText(result);
+	console.log(resultNode);
+	allClear(array);
+	appendTextToDisplay(resultNode);
+}
+
+// Function that outputs the numbers on the left and right side of the operator for processing
+function outputOperatorArgs(array) {
+	let newArray = array.slice(0, array.length - 1);
+	console.log(newArray);
+	const operatorArgs = getNumbers(newArray);
+	let operatorNumbers = [parseElems(operatorArgs[0]), parseElems(operatorArgs[1])];
+	return operatorNumbers;
 	
 }
 
 // Function to get the numbers to be summed that are on the left and right of the operator
-function getOperatorArgs(array) {
+function getNumbers(array) {
+	var leftNumbers;
+	var rightNumbers;
+	let numbersArray = [];
+	let operatorArray = ["+","-","*","/","^",]
 	for (var i = 0; i < array.length; i++) {
-		if (array[i].innerText == "+") {
-			let Operators = array.split('+');
-			const [, ...operators] = Operators;
-			console.log(operators);		
-		} else {
-			console.log(array)
+		for (var j = 0; j < operatorArray.length; j++) {
+			if (array[i].innerText == operatorArray[j]) {
+			const operatorIndex = array.indexOf(array[i]);
+			leftNumbers = array.slice(0, operatorIndex);
+			rightNumbers = array.slice((operatorIndex + 1), array.length);
+			numbersArray.push(leftNumbers);
+			numbersArray.push(rightNumbers);		
+			} else{
+				//Nothing
+			}
 		}
-		return Operators;
 	}
-	return Operators;
+	return numbersArray;
 }
 
 
-// Function that accepts any array as a parameter and converts all the array item to the number data type.
+// Function that accepts any array as a parameter and converts all the array item to the number data type
 function parseElems(array) {
 	let stringArr = [];
+	let combinedElem;
 	for (var i = 0; i < array.length; i++) {
 		stringArr.push(array[i].innerText);
 	}
 	if (stringArr.length > 0) {
-		let combinedElem = stringArr.join("");
-		return combinedElem;
+		combinedElem = stringArr.join("");
 	} else {
 		console.log("loop not working")
 	}
 	const parsedElem = parseInt(combinedElem);
 
 	return parsedElem;
+}
+
+// Function to create a p element node and append the result of an operation to the displaybox
+function createAddText(element) {
+	const pElement = document.createElement("p");
+	const textNode = document.createTextNode(`${element}`);
+	pElement.appendChild(textNode);
+	return pElement;
 }
 
 // Function that removes all innerText connected to the display element
@@ -150,9 +201,9 @@ function appendTextToDisplay(element) {
 }
 
 // Function that sets an element's background color to a random color
-function setColor(element) {
+function setColor(element, alpha) {
 	const tarGet = element;
-	tarGet.style.backgroundColor = randomRGB();
+	tarGet.style.backgroundColor = randomRGB(alpha);
 }
 
 // Function that turns an element's display off
@@ -161,11 +212,11 @@ function toggleDisplayOff(element) {
 }
 
 // Function that returns a random color upon being invoked.
-function randomRGB() {
-	return `rgb(${randomNum()},${randomNum()},${randomNum()},0.4)`;
+function randomRGB(alpha) {
+	return `rgb(${randomNum()},${randomNum()},${randomNum()},${alpha})`;
 }
 
-// Function that returns a random number between 0 and 280.
+// Function that returns a random number between 0 and 280
 function randomNum() {
 	return Math.floor(Math.random() * 280);
 }
